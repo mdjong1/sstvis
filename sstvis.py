@@ -25,10 +25,12 @@ x_scale = y_scale = 10  # Enlarging the triangles on the screen
 x_offset = 500
 y_offset = 100
 
-# Higher frequency is less updates, lower frequency is higher updates (it's a x % frequency == 0)
+# Higher frequency is less updates, lower frequency is more updates (it's a x % frequency == 0)
 UPDATE_FREQUENCY = 1000
 
-THINNING_FACTOR = 10
+# Only updates every nth triangle, increases clarity in high density datasets
+# Can also put this to 1 and make the scaling factor larger
+THINNING_FACTOR = 5
 
 screen = pygame.display.set_mode(window_dimensions)
 screen.fill(white)

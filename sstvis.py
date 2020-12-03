@@ -1,5 +1,10 @@
 import ast
 import fileinput
+import os
+
+# prevent pygame from printing their welcome message
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+
 import pygame
 
 white = (255, 255, 255)
@@ -8,7 +13,7 @@ black = (0, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
 
-window_dimensions = (2560, 1440)  # Screen resolution to use
+window_dimensions = (2560, 1380)  # Screen resolution to use
 
 # Current setup uses 0,0 -> window_dimensions as size, so have to 'correct' the coords to be closer to 0
 x_correction = 84600
@@ -39,7 +44,7 @@ class Vertex:
         self.z = float(z)
 
         # Easy way to check if the offsets need adjusting; if these are larger than your window_dimensions, it's not going to show up.
-        print(self.x, self.y)
+        # print(self.x, self.y)
 
 
 def process_line(line, count):
@@ -93,12 +98,12 @@ if __name__ == "__main__":
 
         process_line(stdin_line, count)
 
-        print(stdin_line)
+        # Python print already adds new line
+        print(stdin_line.rstrip("\n"))
 
         count += 1
 
     pygame.display.update()
-    print('Done reading')
 
     while running:
         for event in pygame.event.get():

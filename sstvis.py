@@ -19,18 +19,18 @@ window_dimensions = (2560, 1380)  # Screen resolution to use
 x_correction = 84600
 y_correction = 447000
 
-x_scale = y_scale = 10  # Enlarging the triangles on the screen
+x_scale = y_scale = 13  # Enlarging the triangles on the screen
 
 # More granular correction factor, isn't affected by the scale parameter
-x_offset = 500
-y_offset = 100
+x_offset = 0
+y_offset = 0
 
 # Higher frequency is less updates, lower frequency is more updates (it's a x % frequency == 0)
 UPDATE_FREQUENCY = 1000
 
 # Only updates every nth triangle, increases clarity in high density datasets
 # Can also put this to 1 and make the scaling factor larger
-THINNING_FACTOR = 5
+THINNING_FACTOR = 4
 
 screen = pygame.display.set_mode(window_dimensions)
 screen.fill(white)

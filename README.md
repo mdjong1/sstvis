@@ -5,7 +5,7 @@ Python (PyGame) visualizer for sst (https://github.com/hugoledoux/sst)
 
 
 # Usage
-`cat data\crop_10.sma | python sstvis.py`
+`cat data\crop_10.sma | python sstvis.py > data\output.sma`
 
 Leave PyGame window open; don't click away
 

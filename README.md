@@ -10,6 +10,6 @@ Python (PyGame) visualizer for sst (https://github.com/hugoledoux/sst)
 Leave PyGame window open; don't click away
 
 ## Continuous pipe
-`./target/release/sstfin ./data/crop.laz 10 |  ./target/release/sstdt | python sstvis.py | ./target/release/sstobj > ~/temp/crop.obj`
+`./target/release/sstfin ./data/crop.laz 10 |  ./target/release/sstdt | python sstvis.py > /dev/null`
 
 

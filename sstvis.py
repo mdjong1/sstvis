@@ -1,6 +1,7 @@
 import ast
 import fileinput
 import os
+import sys
 import math
 
 # prevent pygame from printing their welcome message
@@ -128,13 +129,11 @@ if __name__ == "__main__":
     for stdin_line in fileinput.input():
         if stdin_line == "":
             continue
-
         process_line(stdin_line, count)
-
         # Python print already adds new line
         # print(stdin_line.rstrip("\n"))
-
         count += 1
+        sys.stdout.write(stdin_line)
 
     pygame.display.update()
 

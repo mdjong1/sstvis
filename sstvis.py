@@ -28,14 +28,13 @@ screen.fill(white)
 
 font = pygame.font.SysFont("Arial", 24)
 
-points_per_second = font.render("X points per second", True, black)
-
-pps_rect = points_per_second.get_rect(bottomleft=(50, window_dimensions[1] - 50))
-
+points_per_second = font.render("X points avg/s", True, black, white)
+pps_rect = points_per_second.get_rect(bottomleft=(50, window_dimensions[1] - 60))
 screen.blit(points_per_second, pps_rect)
 
-screen = pygame.display.set_mode(window_dimensions)
-screen.fill(white)
+points_last_minute = font.render("X points in last minute", True, black, white)
+plm_rect = points_per_second.get_rect(bottomleft=(50, window_dimensions[1] - 25))
+screen.blit(points_per_second, plm_rect)
 
 pygame.display.set_caption('sstvis')
 pygame.display.flip()
@@ -56,6 +55,8 @@ class Processor:
         self.vertex_count = 1
         self.scale = 1
 
+        self.points_per_time = {}
+
     def transform(self, x, y):
         rex = (float(x) - self.bbox[0]) * self.scale
         rey = (float(y) - self.bbox[1]) * self.scale
@@ -69,8 +70,18 @@ class Processor:
 
         split_line = line.rstrip("\n").split(" ")
 
-        points_per_second = font.render(str(random.randint(100, 1000)) + " points per second    ", True, black, white)
-        screen.blit(points_per_second, pps_rect)
+        current_epoch = int(time.time())
+
+        points_in_past_minute = 0
+        for i in range(current_epoch - 60, current_epoch):
+            if i in self.points_per_time.keys():
+                points_in_past_minute += self.points_per_time[i]
+
+        avg_points_per_second = font.render("Average points per second:     " + str(round(points_in_past_minute / 60 * 100) / 100) + "    ", True, black, white)
+        screen.blit(avg_points_per_second, pps_rect)
+
+        points_last_minute = font.render("Points processed past minute: " + str(points_in_past_minute) + "    ", True, black, white)
+        screen.blit(points_last_minute, plm_rect)
 
         if split_line[0] == "#":
             return
@@ -93,6 +104,12 @@ class Processor:
             pygame.draw.lines(surface=screen, color=red, closed=True, points=((minx, miny), (maxx, miny), (maxx, maxy), (minx, maxy)), width=3)
 
         elif split_line[0] == "v":
+            # Add vertex count per unit time
+            if current_epoch not in self.points_per_time.keys():
+                self.points_per_time[current_epoch] = 1
+            else:
+                self.points_per_time[current_epoch] += 1
+
             # Transform x and y into current scale for visualization, then store that version in the Vertex
             x, y = self.transform(split_line[1], split_line[2])
             z = split_line[3]

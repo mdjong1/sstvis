@@ -149,6 +149,8 @@ class Processor:
                     width=1)
                 # pygame.draw.circle(screen, black, ((vertices[f1].x, vertices[f1].y)), 1)
 
+                self.update_statistics()
+
             if self.count % UPDATE_FREQUENCY == 0:
                 pygame.display.update()
 

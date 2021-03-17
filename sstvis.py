@@ -28,13 +28,19 @@ screen.fill(white)
 
 font = pygame.font.SysFont("Arial", 24)
 
-points_per_second = font.render("X points avg/s", True, black, white)
+# TODO: Split label and value for each statistics field
+
+time_taken = font.render("Time taken:                                  0s", True, black, white)
+tt_rect = time_taken.get_rect(bottomleft=(50, window_dimensions[1] - 95))
+screen.blit(time_taken, tt_rect)
+
+points_per_second = font.render("Average points per second:      0.0", True, black, white)
 pps_rect = points_per_second.get_rect(bottomleft=(50, window_dimensions[1] - 60))
 screen.blit(points_per_second, pps_rect)
 
-points_last_minute = font.render("X points in last minute", True, black, white)
-plm_rect = points_per_second.get_rect(bottomleft=(50, window_dimensions[1] - 25))
-screen.blit(points_per_second, plm_rect)
+points_last_minute = font.render("Points processed past minute:  0", True, black, white)
+plm_rect = points_last_minute.get_rect(bottomleft=(50, window_dimensions[1] - 25))
+screen.blit(points_last_minute, plm_rect)
 
 pygame.display.set_caption('sstvis')
 pygame.display.flip()
@@ -55,6 +61,7 @@ class Processor:
         self.vertex_count = 1
         self.scale = 1
 
+        self.start_time = time.time()
         self.points_per_time = {}
 
     def transform(self, x, y):
@@ -66,22 +73,22 @@ class Processor:
         self.count += 1
 
     def update_statistics(self):
-        pygame.event.get()
-
-        split_line = line.rstrip("\n").split(" ")
-
         current_epoch = int(time.time())
+
+        time_taken = font.render("Time taken:                                 " + str(round(current_epoch - self.start_time)) + "s         ", True, black, white)
+        screen.blit(time_taken, tt_rect)
 
         points_in_past_minute = 0
         for i in range(current_epoch - 60, current_epoch):
-            if i in self.points_per_time.keys():
+            if i in self.points_per_time:
                 points_in_past_minute += self.points_per_time[i]
 
-        avg_points_per_second = font.render("Average points per second:     " + str(round(points_in_past_minute / 60 * 100) / 100) + "    ", True, black, white)
-        screen.blit(avg_points_per_second, pps_rect)
+        points_per_second = font.render("Average points per second:     " + str(round(points_in_past_minute / 60 * 100) / 100) + "    ", True, black, white)
+        screen.blit(points_per_second, pps_rect)
 
-        points_last_minute = font.render("Points processed past minute: " + str(points_in_past_minute) + "    ", True, black, white)
+        points_last_minute = font.render("Points processed past minute: " + str(points_in_past_minute) + "     ", True, black, white)
         screen.blit(points_last_minute, plm_rect)
+
 
     def process_line(self, line):
         pygame.event.get()

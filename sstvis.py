@@ -65,6 +65,8 @@ class Processor:
         self.count += 1
 
     def process_line(self, line):
+        pygame.event.get()
+
         split_line = line.rstrip("\n").split(" ")
 
         points_per_second = font.render(str(random.randint(100, 1000)) + " points per second    ", True, black, white)

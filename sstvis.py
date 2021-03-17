@@ -65,7 +65,7 @@ class Processor:
     def increment_count(self):
         self.count += 1
 
-    def process_line(self, line):
+    def update_statistics(self):
         pygame.event.get()
 
         split_line = line.rstrip("\n").split(" ")
@@ -82,6 +82,11 @@ class Processor:
 
         points_last_minute = font.render("Points processed past minute: " + str(points_in_past_minute) + "    ", True, black, white)
         screen.blit(points_last_minute, plm_rect)
+
+    def process_line(self, line):
+        pygame.event.get()
+
+        split_line = line.rstrip("\n").split(" ")
 
         if split_line[0] == "#":
             return
@@ -104,7 +109,8 @@ class Processor:
             pygame.draw.lines(surface=screen, color=red, closed=True, points=((minx, miny), (maxx, miny), (maxx, maxy), (minx, maxy)), width=3)
 
         elif split_line[0] == "v":
-            # Add vertex count per unit time
+            # Add vertex count per unit
+            current_epoch = int(time.time())
             if current_epoch not in self.points_per_time.keys():
                 self.points_per_time[current_epoch] = 1
             else:

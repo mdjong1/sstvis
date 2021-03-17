@@ -106,19 +106,21 @@ class Processor:
 
             delta_x = self.bbox[2] - self.bbox[0]
             delta_y = self.bbox[3] - self.bbox[1]
-            smallest_delta = delta_y if delta_y < delta_x else delta_x
+            largest_delta = delta_y if delta_y > delta_x else delta_x
 
-            self.scale = math.floor(window_dimensions[1] / smallest_delta)
+            self.scale = math.floor(window_dimensions[1] / largest_delta)
 
             minx, miny = self.transform(self.bbox[0], self.bbox[1])
             maxx, maxy = self.transform(self.bbox[2], self.bbox[3])
 
             pygame.draw.lines(surface=screen, color=red, closed=True, points=((minx, miny), (maxx, miny), (maxx, maxy), (minx, maxy)), width=3)
 
+            pygame.display.update()
+
         elif split_line[0] == "v":
             # Add vertex count per unit
             current_epoch = int(time.time())
-            if current_epoch not in self.points_per_time.keys():
+            if current_epoch not in self.points_per_time:
                 self.points_per_time[current_epoch] = 1
             else:
                 self.points_per_time[current_epoch] += 1

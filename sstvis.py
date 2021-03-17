@@ -1,6 +1,7 @@
 import fileinput
 import sys
 import math
+import random
 import pygame
 
 # Define some basic colors for easy use
@@ -19,6 +20,19 @@ UPDATE_FREQUENCY = 500
 # Only updates every nth triangle, increases clarity in high density datasets
 # Can also put this to 1 and make the scaling factor larger
 THINNING_FACTOR = 1
+
+pygame.init()
+
+screen = pygame.display.set_mode(window_dimensions)
+screen.fill(white)
+
+font = pygame.font.SysFont("Arial", 24)
+
+points_per_second = font.render("X points per second", True, black)
+
+pps_rect = points_per_second.get_rect(bottomleft=(50, window_dimensions[1] - 50))
+
+screen.blit(points_per_second, pps_rect)
 
 screen = pygame.display.set_mode(window_dimensions)
 screen.fill(white)
@@ -52,6 +66,9 @@ class Processor:
 
     def process_line(self, line):
         split_line = line.rstrip("\n").split(" ")
+
+        points_per_second = font.render(str(random.randint(100, 1000)) + " points per second    ", True, black, white)
+        screen.blit(points_per_second, pps_rect)
 
         if split_line[0] == "#":
             return

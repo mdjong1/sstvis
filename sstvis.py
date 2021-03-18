@@ -2,10 +2,7 @@ import fileinput
 import sys
 import math
 import time
-import random
 import os
-
-from ast import literal_eval
 
 # prevent pygame from printing their welcome message
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"

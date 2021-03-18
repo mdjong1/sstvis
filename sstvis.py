@@ -3,6 +3,12 @@ import sys
 import math
 import time
 import random
+import os
+
+from ast import literal_eval
+
+# prevent pygame from printing their welcome message
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 
 # Define some basic colors for easy use
@@ -31,17 +37,47 @@ font = pygame.font.SysFont("Arial", 24)
 
 # TODO: Split label and value for each statistics field
 
-time_taken = font.render("Time taken:                                  0s", True, black, white)
-tt_rect = time_taken.get_rect(bottomleft=(50, window_dimensions[1] - 95))
+time_taken = font.render(" Time taken:", True, black, white)
+tt_rect = time_taken.get_rect(bottomright=(300, window_dimensions[1] - 165))
 screen.blit(time_taken, tt_rect)
 
-points_per_second = font.render("Average points per second:      0.0", True, black, white)
-pps_rect = points_per_second.get_rect(bottomleft=(50, window_dimensions[1] - 60))
+time_taken_val = font.render(" 0s", True, black, white)
+tt_rect2 = time_taken_val.get_rect(bottomleft=(300, window_dimensions[1] - 165))
+screen.blit(time_taken_val, tt_rect2)
+
+points_per_second = font.render(" Average # points per second:", True, black, white)
+pps_rect = points_per_second.get_rect(bottomright=(300, window_dimensions[1] - 130))
 screen.blit(points_per_second, pps_rect)
 
-points_last_minute = font.render("Points processed past minute:  0", True, black, white)
-plm_rect = points_last_minute.get_rect(bottomleft=(50, window_dimensions[1] - 25))
+points_per_second_val = font.render(" 0", True, black, white)
+pps_rect2 = points_per_second_val.get_rect(bottomleft=(300, window_dimensions[1] - 130))
+screen.blit(points_per_second_val, pps_rect2)
+
+points_last_minute = font.render(" Points processed past minute:", True, black, white)
+plm_rect = points_last_minute.get_rect(bottomright=(300, window_dimensions[1] - 95))
 screen.blit(points_last_minute, plm_rect)
+
+points_last_minute_val = font.render(" 0", True, black, white)
+plm_rect2 = points_last_minute_val.get_rect(bottomleft=(300, window_dimensions[1] - 95))
+screen.blit(points_last_minute_val, plm_rect2)
+
+total_points = font.render(" Total # of points:", True, black, white)
+tp_rect = total_points.get_rect(bottomright=(300, window_dimensions[1] - 60))
+screen.blit(total_points, tp_rect)
+
+total_points_val = font.render(" 0", True, black, white)
+tp_rect2 = total_points_val.get_rect(bottomleft=(300, window_dimensions[1] - 60))
+screen.blit(total_points_val, tp_rect2)
+
+total_triangles = font.render(" Total # of triangles:", True, black, white)
+ttr_rect = total_triangles.get_rect(bottomright=(300, window_dimensions[1] - 25))
+screen.blit(total_triangles, ttr_rect)
+
+total_triangles_val = font.render(" 0", True, black, white)
+ttr_rect2 = total_triangles_val.get_rect(bottomleft=(300, window_dimensions[1] - 25))
+screen.blit(total_triangles_val, ttr_rect2)
+
+
 
 pygame.display.set_caption('sstvis')
 pygame.display.flip()
@@ -60,6 +96,7 @@ class Processor:
         self.vertices = {}
         self.count = 0
         self.vertex_count = 1
+        self.triangle_count = 0
         self.scale = 1
 
         self.start_time = time.time()
@@ -76,20 +113,32 @@ class Processor:
     def update_statistics(self):
         current_epoch = int(time.time())
 
-        time_taken = font.render("Time taken:                                 " + str(round(current_epoch - self.start_time)) + "s         ", True, black, white)
-        screen.blit(time_taken, tt_rect)
+        time_taken_val = font.render(" " + str(round(current_epoch - self.start_time)) + "s            ", True, black, white)
+        screen.blit(time_taken_val, tt_rect2)
 
         points_in_past_minute = 0
         for i in range(current_epoch - 60, current_epoch):
             if i in self.points_per_time:
                 points_in_past_minute += self.points_per_time[i]
 
-        points_per_second = font.render("Average points per second:     " + str(round(points_in_past_minute / 60 * 100) / 100) + "    ", True, black, white)
+        points_per_second_val = font.render(" " + str(round(points_in_past_minute / 60)) + "            ", True, black, white)
+        screen.blit(points_per_second_val, pps_rect2)
+
+        points_last_minute_val = font.render(" " + str(points_in_past_minute) + "       ", True, black, white)
+        screen.blit(points_last_minute_val, plm_rect2)
+
+        total_points_val = font.render(" " + str(self.vertex_count - 1) + "      ", True, black, white)
+        screen.blit(total_points_val, tp_rect2)
+
+        total_triangles_val = font.render(" " + str(self.triangle_count) + "      ", True, black, white)
+        screen.blit(total_triangles_val, ttr_rect2)
+
+        # Keep these on top for legibility
+        screen.blit(time_taken, tt_rect)
         screen.blit(points_per_second, pps_rect)
-
-        points_last_minute = font.render("Points processed past minute: " + str(points_in_past_minute) + "     ", True, black, white)
         screen.blit(points_last_minute, plm_rect)
-
+        screen.blit(total_points, tp_rect)
+        screen.blit(total_triangles, ttr_rect)
 
     def process_line(self, line):
         pygame.event.get()
@@ -155,13 +204,7 @@ class Processor:
             if self.count % UPDATE_FREQUENCY == 0:
                 pygame.display.update()
 
-        elif split_line[0] == "x":
-            v = int(split_line[1])
-            del self.vertices[v]
-
-        else:
-            print("Unknown character in stream!")
-            return
+            self.triangle_count += 1
 
 
 if __name__ == "__main__":
@@ -176,6 +219,9 @@ if __name__ == "__main__":
 
         sys.stdout.write(stdin_line)
 
+    # Last update of statistics to ensure uniformity
+    processor.update_statistics()
+
     # Do a final update; because of update frequency a final update in processing loop is not guaranteed
     pygame.display.update()
 
@@ -183,5 +229,5 @@ if __name__ == "__main__":
     running = True
     while running:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 running = False

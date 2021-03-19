@@ -189,9 +189,9 @@ class Processor:
                     color=black,
                     closed=True,
                     points=(
-                        (self.vertices[f1].x, self.vertices[f1].y),
-                        (self.vertices[f2].x, self.vertices[f2].y),
-                        (self.vertices[f3].x, self.vertices[f3].y)
+                        (self.vertices[f1].x, window_dimensions[1] - self.vertices[f1].y),
+                        (self.vertices[f2].x, window_dimensions[1] - self.vertices[f2].y),
+                        (self.vertices[f3].x, window_dimensions[1] - self.vertices[f3].y)
                     ),
                     width=1)
                 # pygame.draw.circle(screen, black, ((vertices[f1].x, vertices[f1].y)), 1)

@@ -160,7 +160,17 @@ class Processor:
             minx, miny = self.transform(self.bbox[0], self.bbox[1])
             maxx, maxy = self.transform(self.bbox[2], self.bbox[3])
 
-            pygame.draw.lines(surface=screen, color=red, closed=True, points=((minx, miny), (maxx, miny), (maxx, maxy), (minx, maxy)), width=3)
+            pygame.draw.lines(
+                surface=screen,
+                color=red,
+                closed=True,
+                points=(
+                    (minx, window_dimensions[1] - miny),
+                    (maxx, window_dimensions[1] - miny),
+                    (maxx, window_dimensions[1] - maxy),
+                    (minx, window_dimensions[1] - maxy)
+                ),
+                width=3)
 
             pygame.display.update()
 

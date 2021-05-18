@@ -38,7 +38,7 @@ time_taken = font.render(" Time taken:", True, black, white)
 tt_rect = time_taken.get_rect(bottomright=(300, window_dimensions[1] - 165))
 screen.blit(time_taken, tt_rect)
 
-time_taken_val = font.render(" 0s", True, black, white)
+time_taken_val = font.render("  ", True, black, white)
 tt_rect2 = time_taken_val.get_rect(bottomleft=(300, window_dimensions[1] - 165))
 screen.blit(time_taken_val, tt_rect2)
 
@@ -46,7 +46,7 @@ points_per_second = font.render(" Average # points per second:", True, black, wh
 pps_rect = points_per_second.get_rect(bottomright=(300, window_dimensions[1] - 130))
 screen.blit(points_per_second, pps_rect)
 
-points_per_second_val = font.render(" 0", True, black, white)
+points_per_second_val = font.render("  ", True, black, white)
 pps_rect2 = points_per_second_val.get_rect(bottomleft=(300, window_dimensions[1] - 130))
 screen.blit(points_per_second_val, pps_rect2)
 
@@ -54,7 +54,7 @@ points_last_minute = font.render(" Points processed past minute:", True, black, 
 plm_rect = points_last_minute.get_rect(bottomright=(300, window_dimensions[1] - 95))
 screen.blit(points_last_minute, plm_rect)
 
-points_last_minute_val = font.render(" 0", True, black, white)
+points_last_minute_val = font.render("  ", True, black, white)
 plm_rect2 = points_last_minute_val.get_rect(bottomleft=(300, window_dimensions[1] - 95))
 screen.blit(points_last_minute_val, plm_rect2)
 
@@ -62,7 +62,7 @@ total_points = font.render(" Total # of points:", True, black, white)
 tp_rect = total_points.get_rect(bottomright=(300, window_dimensions[1] - 60))
 screen.blit(total_points, tp_rect)
 
-total_points_val = font.render(" 0", True, black, white)
+total_points_val = font.render("  ", True, black, white)
 tp_rect2 = total_points_val.get_rect(bottomleft=(300, window_dimensions[1] - 60))
 screen.blit(total_points_val, tp_rect2)
 
@@ -70,7 +70,7 @@ total_triangles = font.render(" Total # of triangles:", True, black, white)
 ttr_rect = total_triangles.get_rect(bottomright=(300, window_dimensions[1] - 25))
 screen.blit(total_triangles, ttr_rect)
 
-total_triangles_val = font.render(" 0", True, black, white)
+total_triangles_val = font.render("  ", True, black, white)
 ttr_rect2 = total_triangles_val.get_rect(bottomleft=(300, window_dimensions[1] - 25))
 screen.blit(total_triangles_val, ttr_rect2)
 
@@ -100,7 +100,7 @@ class Processor:
         self.points_per_time = {}
 
     def transform(self, x, y):
-        rex = (float(x) - self.bbox[0]) * self.scale
+        rex = (float(x) - self.bbox[0]) * self.scale + 5
         rey = (float(y) - self.bbox[1]) * self.scale
         return rex, rey
 
@@ -165,12 +165,13 @@ class Processor:
                 color=red,
                 closed=True,
                 points=(
-                    (minx, window_dimensions[1] - miny),
-                    (maxx, window_dimensions[1] - miny),
-                    (maxx, window_dimensions[1] - maxy),
-                    (minx, window_dimensions[1] - maxy)
+                    (minx, window_dimensions[1] - miny - 5),
+                    (maxx, window_dimensions[1] - miny - 5),
+                    (maxx, window_dimensions[1] - maxy - 5),
+                    (minx, window_dimensions[1] - maxy - 5)
                 ),
-                width=3)
+                width=3
+            )
 
             pygame.display.update()
 
@@ -199,9 +200,9 @@ class Processor:
                     color=black,
                     closed=True,
                     points=(
-                        (self.vertices[f1].x, window_dimensions[1] - self.vertices[f1].y),
-                        (self.vertices[f2].x, window_dimensions[1] - self.vertices[f2].y),
-                        (self.vertices[f3].x, window_dimensions[1] - self.vertices[f3].y)
+                        (self.vertices[f1].x, window_dimensions[1] - self.vertices[f1].y - 5),
+                        (self.vertices[f2].x, window_dimensions[1] - self.vertices[f2].y - 5),
+                        (self.vertices[f3].x, window_dimensions[1] - self.vertices[f3].y - 5)
                     ),
                     width=1)
                 # pygame.draw.circle(screen, black, ((vertices[f1].x, vertices[f1].y)), 1)
@@ -217,7 +218,7 @@ class Processor:
 if __name__ == "__main__":
     processor = Processor()
 
-    for stdin_line in fileinput.input():
+    for stdin_line in sys.stdin:
         if stdin_line == "":
             continue
 

@@ -16,11 +16,12 @@ black = (0, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
 
+
 # Screen resolution to use
 window_dimensions = (1200, 800)
 
 # Higher frequency is less updates, lower frequency is more updates (it's a x % frequency == 0)
-UPDATE_FREQUENCY = 500
+UPDATE_FREQUENCY = 1000
 
 # Only updates every nth triangle, increases clarity in high density datasets
 # Can also put this to 1 and make the scaling factor larger
@@ -31,48 +32,48 @@ pygame.init()
 screen = pygame.display.set_mode(window_dimensions)
 screen.fill(white)
 
-font = pygame.font.SysFont("Arial", 24)
+font = pygame.font.SysFont("Arial", 12)
 
 # TODO: Split label and value for each statistics field
 
-time_taken = font.render(" Time taken:", True, black, white)
-tt_rect = time_taken.get_rect(bottomright=(300, window_dimensions[1] - 165))
+time_taken = font.render("time:", True, white, blue)
+tt_rect = time_taken.get_rect(bottomright=(80, window_dimensions[1] - 65))
 screen.blit(time_taken, tt_rect)
 
-time_taken_val = font.render("  ", True, black, white)
-tt_rect2 = time_taken_val.get_rect(bottomleft=(300, window_dimensions[1] - 165))
+time_taken_val = font.render("  ", True, white, blue)
+tt_rect2 = time_taken_val.get_rect(bottomleft=(80, window_dimensions[1] - 65))
 screen.blit(time_taken_val, tt_rect2)
 
-points_per_second = font.render(" Average # points per second:", True, black, white)
-pps_rect = points_per_second.get_rect(bottomright=(300, window_dimensions[1] - 130))
+points_per_second = font.render("avg #pts/s:", True, white, blue)
+pps_rect = points_per_second.get_rect(bottomright=(80, window_dimensions[1] - 45))
 screen.blit(points_per_second, pps_rect)
 
-points_per_second_val = font.render("  ", True, black, white)
-pps_rect2 = points_per_second_val.get_rect(bottomleft=(300, window_dimensions[1] - 130))
+points_per_second_val = font.render("  ", True, white, blue)
+pps_rect2 = points_per_second_val.get_rect(bottomleft=(80, window_dimensions[1] - 45))
 screen.blit(points_per_second_val, pps_rect2)
 
-points_last_minute = font.render(" Points processed past minute:", True, black, white)
-plm_rect = points_last_minute.get_rect(bottomright=(300, window_dimensions[1] - 95))
-screen.blit(points_last_minute, plm_rect)
+# points_last_minute = font.render(" # pts last minute:", True, white, blue)
+# plm_rect = points_last_minute.get_rect(bottomright=(80, window_dimensions[1] - 95))
+# screen.blit(points_last_minute, plm_rect)
 
-points_last_minute_val = font.render("  ", True, black, white)
-plm_rect2 = points_last_minute_val.get_rect(bottomleft=(300, window_dimensions[1] - 95))
-screen.blit(points_last_minute_val, plm_rect2)
+# points_last_minute_val = font.render("  ", True, white, blue)
+# plm_rect2 = points_last_minute_val.get_rect(bottomleft=(80, window_dimensions[1] - 95))
+# screen.blit(points_last_minute_val, plm_rect2)
 
-total_points = font.render(" Total # of points:", True, black, white)
-tp_rect = total_points.get_rect(bottomright=(300, window_dimensions[1] - 60))
+total_points = font.render("# pts:", True, white, blue)
+tp_rect = total_points.get_rect(bottomright=(80, window_dimensions[1] - 25))
 screen.blit(total_points, tp_rect)
 
-total_points_val = font.render("  ", True, black, white)
-tp_rect2 = total_points_val.get_rect(bottomleft=(300, window_dimensions[1] - 60))
+total_points_val = font.render("  ", True, white, blue)
+tp_rect2 = total_points_val.get_rect(bottomleft=(80, window_dimensions[1] - 25))
 screen.blit(total_points_val, tp_rect2)
 
-total_triangles = font.render(" Total # of triangles:", True, black, white)
-ttr_rect = total_triangles.get_rect(bottomright=(300, window_dimensions[1] - 25))
+total_triangles = font.render("# triangles:", True, white, blue)
+ttr_rect = total_triangles.get_rect(bottomright=(80, window_dimensions[1] - 5))
 screen.blit(total_triangles, ttr_rect)
 
-total_triangles_val = font.render("  ", True, black, white)
-ttr_rect2 = total_triangles_val.get_rect(bottomleft=(300, window_dimensions[1] - 25))
+total_triangles_val = font.render("  ", True, white, blue)
+ttr_rect2 = total_triangles_val.get_rect(bottomleft=(80, window_dimensions[1] - 5))
 screen.blit(total_triangles_val, ttr_rect2)
 
 
@@ -122,8 +123,8 @@ class Processor:
         points_per_second_val = font.render(" " + str(round(points_in_past_minute / 60)) + "            ", True, black, white)
         screen.blit(points_per_second_val, pps_rect2)
 
-        points_last_minute_val = font.render(" " + str(points_in_past_minute) + "       ", True, black, white)
-        screen.blit(points_last_minute_val, plm_rect2)
+        # points_last_minute_val = font.render(" " + str(points_in_past_minute) + "       ", True, black, white)
+        # screen.blit(points_last_minute_val, plm_rect2)
 
         total_points_val = font.render(" " + str(self.vertex_count - 1) + "      ", True, black, white)
         screen.blit(total_points_val, tp_rect2)
@@ -134,7 +135,7 @@ class Processor:
         # Keep these on top for legibility
         screen.blit(time_taken, tt_rect)
         screen.blit(points_per_second, pps_rect)
-        screen.blit(points_last_minute, plm_rect)
+        # screen.blit(points_last_minute, plm_rect)
         screen.blit(total_points, tp_rect)
         screen.blit(total_triangles, ttr_rect)
 

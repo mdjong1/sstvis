@@ -3,6 +3,7 @@ import sys
 import math
 import time
 import os
+import click
 
 # prevent pygame from printing their welcome message
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
@@ -215,27 +216,31 @@ class Processor:
             self.triangle_count += 1
 
 
-if __name__ == "__main__":
+@click.command()
+@click.option('--thinning', default=THINNING_FACTOR, help='Number of greetings.')
+@click.option('--frequency', default=UPDATE_FREQUENCY, help='The person to greet.')
+def main(thinning, frequency):
+    global THINNING_FACTOR 
+    global UPDATE_FREQUENCY 
+    THINNING_FACTOR = thinning
+    UPDATE_FREQUENCY = frequency
     processor = Processor()
-
     for stdin_line in sys.stdin:
         if stdin_line == "":
             continue
-
         processor.process_line(stdin_line)
         processor.increment_count()
-
         sys.stdout.write(stdin_line)
-
     # Last update of statistics to ensure uniformity
     processor.update_statistics()
-
     # Do a final update; because of update frequency a final update in processing loop is not guaranteed
     pygame.display.update()
-
     # Keep the pygame window running so you can view the final result
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 running = False
+
+if __name__ == "__main__":
+    main()

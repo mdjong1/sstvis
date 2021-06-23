@@ -218,8 +218,8 @@ class Processor:
 
 
 @click.command()
-@click.option('--thinning', default=THINNING_FACTOR, help='Number of greetings.')
-@click.option('--frequency', default=UPDATE_FREQUENCY, help='The person to greet.')
+@click.option('--thinning', default=THINNING_FACTOR, help='thinning factor (1 = no thinning)')
+@click.option('--frequency', default=UPDATE_FREQUENCY, help='Higher frequency is less updates, lower frequency is more updates')
 def main(thinning, frequency):
     global THINNING_FACTOR 
     global UPDATE_FREQUENCY 
